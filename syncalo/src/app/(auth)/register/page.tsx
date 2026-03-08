@@ -19,12 +19,13 @@ export default function RegisterPage() {
     const name = form.get("name") as string;
     const email = form.get("email") as string;
     const password = form.get("password") as string;
+    const orgName = form.get("orgName") as string;
 
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, orgName }),
       });
 
       if (!res.ok) {
@@ -45,28 +46,39 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-2xl shadow p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Crear cuenta</h1>
-        <p className="text-gray-500 mb-6 text-sm">
-          14 días gratis, sin tarjeta de crédito
-        </p>
+        <Link href="/" className="text-blue-600 font-bold text-xl block mb-6">
+          Syncalo
+        </Link>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Crear cuenta</h1>
+        <p className="text-gray-500 mb-6 text-sm">14 días gratis, sin tarjeta de crédito</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nombre
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Tu nombre</label>
             <input
               name="name"
               type="text"
               required
+              placeholder="Ej: María García"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+              Nombre de la agencia / empresa
             </label>
+            <input
+              name="orgName"
+              type="text"
+              required
+              placeholder="Ej: Inmobiliaria García"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input
               name="email"
               type="email"
@@ -76,14 +88,13 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Contraseña
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
             <input
               name="password"
               type="password"
               required
               minLength={6}
+              placeholder="Mínimo 6 caracteres"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -93,7 +104,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
+            className="w-full bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition"
           >
             {loading ? "Creando cuenta..." : "Crear cuenta gratis"}
           </button>

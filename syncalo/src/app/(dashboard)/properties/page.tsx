@@ -1,4 +1,7 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
+
+export const metadata: Metadata = { title: "Propiedades" };
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import PropertiesClient from "./PropertiesClient";

@@ -71,6 +71,8 @@ model Organization {
   members      Member[]
   properties   Property[]
   subscription Subscription?
+  tenants      Tenant[]
+  contracts    Contract[]
 }
 
 model Member {
@@ -99,6 +101,58 @@ model Property {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   channels     Channel[]
   bookings     Booking[]
+  contracts    Contract[]
+}
+
+// ─── Inmobiliaria ─────────────────────────────────────────────────────────────
+
+model Tenant {
+  id             String   @id @default(cuid())
+  name           String
+  email          String?
+  phone          String?
+  document       String?
+  notes          String?
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contracts    Contract[]
+}
+
+model Contract {
+  id             String         @id @default(cuid())
+  propertyId     String
+  tenantId       String
+  organizationId String
+  startDate      DateTime
+  endDate        DateTime?
+  monthlyRent    Float
+  deposit        Float?
+  status         ContractStatus @default(ACTIVE)
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  property     Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  tenant       Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  payments     Payment[]
+}
+
+model Payment {
+  id         String        @id @default(cuid())
+  contractId String
+  amount     Float
+  dueDate    DateTime
+  paidAt     DateTime?
+  status     PaymentStatus @default(PENDING)
+  notes      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  contract Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
 }
 
 model Channel {
@@ -179,4 +233,17 @@ enum SubscriptionStatus {
   ACTIVE
   CANCELLED
   PAST_DUE
+}
+
+enum ContractStatus {
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  LATE
+  WAIVED
 }

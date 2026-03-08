@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import Link from "next/link";
 import type { Channel, Property } from "@prisma/client";
 
 type PropertyWithChannels = Property & {
@@ -222,9 +223,17 @@ function PropertyCard({
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="font-semibold text-gray-900 text-lg">
-            {property.name}
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="font-semibold text-gray-900 text-lg">
+              {property.name}
+            </h2>
+            <Link
+              href={`/properties/${property.id}`}
+              className="text-xs text-blue-600 hover:text-blue-800 transition"
+            >
+              Ver detalle →
+            </Link>
+          </div>
           {property.address && (
             <p className="text-gray-500 text-sm mt-0.5">{property.address}</p>
           )}

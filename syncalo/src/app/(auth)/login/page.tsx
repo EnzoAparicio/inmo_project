@@ -34,8 +34,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-2xl shadow p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Iniciar sesión</h1>
-        <p className="text-gray-500 mb-6 text-sm">Bienvenido de vuelta a Syncalo</p>
+        <Link href="/" className="text-blue-600 font-bold text-xl block mb-6">Syncalo</Link>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Iniciar sesión</h1>
+        <p className="text-gray-500 mb-6 text-sm">Bienvenido de vuelta</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

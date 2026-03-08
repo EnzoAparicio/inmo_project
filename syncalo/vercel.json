@@ -7,6 +7,14 @@
     {
       "path": "/api/cron/trials",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/payments",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/contracts",
+      "schedule": "0 9 * * *"
     }
   ]
 }

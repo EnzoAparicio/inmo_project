@@ -8,6 +8,7 @@ const registerSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
+  orgName: z.string().min(2).optional(),
 });
 
 function generateSlug(name: string): string {
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Datos inválidos" }, { status: 400 });
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, orgName } = parsed.data;
 
   const existing = await db.user.findUnique({ where: { email } });
   if (existing) {
@@ -48,10 +49,11 @@ export async function POST(req: NextRequest) {
       data: { name, email, password: hashedPassword },
     });
 
+    const resolvedOrgName = orgName ?? name;
     await tx.organization.create({
       data: {
-        name,
-        slug: generateSlug(name),
+        name: resolvedOrgName,
+        slug: generateSlug(resolvedOrgName),
         members: {
           create: { userId: newUser.id, role: "ADMIN" },
         },

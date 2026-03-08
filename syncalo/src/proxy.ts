@@ -5,7 +5,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
   const isAuthenticated = !!req.auth?.user?.id;
 
-  const protectedPrefixes = ["/dashboard", "/properties", "/calendar", "/settings", "/billing"];
+  const protectedPrefixes = ["/dashboard", "/properties", "/calendar", "/settings", "/billing", "/tenants", "/contracts"];
   const isProtected = protectedPrefixes.some((p) => pathname.startsWith(p));
 
   if (isProtected && !isAuthenticated) {

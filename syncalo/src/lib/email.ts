@@ -47,6 +47,49 @@ export async function sendConflictAlert({
   });
 }
 
+export async function sendPaymentReminder({
+  to,
+  tenantName,
+  propertyName,
+  amount,
+  dueDate,
+  orgName,
+}: {
+  to: string;
+  tenantName: string;
+  propertyName: string;
+  amount: number;
+  dueDate: Date;
+  orgName: string;
+}) {
+  const formatted = new Intl.NumberFormat("es-UY", {
+    style: "currency",
+    currency: "UYU",
+    minimumFractionDigits: 0,
+  }).format(amount);
+  const dateStr = dueDate.toLocaleDateString("es-UY", { day: "numeric", month: "long", year: "numeric" });
+
+  await resend.emails.send({
+    from: FROM,
+    to,
+    subject: `Recordatorio de pago — ${propertyName}`,
+    text: `Hola ${tenantName},\n\nTe recordamos que tenés un pago pendiente de ${formatted} con vencimiento el ${dateStr} por la propiedad ${propertyName}.\n\nPor favor coordinar el pago con ${orgName}.\n\n— ${orgName}`,
+    html: `
+      <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+        <h2 style="color:#2563eb">Recordatorio de pago</h2>
+        <p>Hola <strong>${tenantName}</strong>,</p>
+        <p>Te recordamos que tenés un pago pendiente:</p>
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin:16px 0">
+          <p style="margin:4px 0"><strong>Propiedad:</strong> ${propertyName}</p>
+          <p style="margin:4px 0"><strong>Monto:</strong> ${formatted}</p>
+          <p style="margin:4px 0"><strong>Vencimiento:</strong> ${dateStr}</p>
+        </div>
+        <p>Por favor coordinar el pago con <strong>${orgName}</strong>.</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendTrialEndingAlert({
   to,
   orgName,
